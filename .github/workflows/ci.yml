@@ -42,6 +42,8 @@ jobs:
   check-backend:
     name: Check Backend (Fastify/Node.js)
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
     steps:
     - uses: actions/checkout@v4
     
@@ -55,8 +57,6 @@ jobs:
     - name: Install Dependencies
       working-directory: ./backend
       run: npm ci
-      env:
-        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
       
     - name: Typecheck Backend
       working-directory: ./backend
