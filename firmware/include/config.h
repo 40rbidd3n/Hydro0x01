@@ -365,12 +365,42 @@ struct SystemStatus {
 
 
 struct SystemConfig {
-    // Power & Timing
-    bool deepSleepEnabled = false;
-    uint32_t sleepDurationSec = 300;
-    uint32_t activeDurationMs = 60000; // 1 min 60k ms
-    float batteryLowThreshold = 7.2;
-    float batteryCriticalThreshold = 5.1;
+    // Power & Timing Configuration
+    // ------------------------------------------------------------
+    // These settings control how the system saves power and
+    // when it enters deep sleep to protect the battery.
+    
+    bool deepSleepEnabled = false;      
+    // If true → device will enter deep sleep when battery is low/critical
+    // Useful for solar-powered autonomous systems
+    
+    uint32_t sleepDurationSec = 300;    
+    // How long the device sleeps before waking up again (seconds)
+    // Example: 300s = wake up every 5 minutes
+    
+    uint32_t activeDurationMs = 60000;  
+    // How long the system stays awake after boot (milliseconds)
+    // Example: 60000ms = 1 minute active time for sensors + communication
+    
+    // ------------------------------------------------------------
+    // Battery Protection Thresholds (VERY IMPORTANT)
+    // ------------------------------------------------------------
+    // These values MUST match your battery type.
+    
+    // For 12V AGM / GEL (lead-acid solar battery):
+    // batteryLowThreshold     = 12.1V  → early warning (~40–50% capacity)
+    // batteryCriticalThreshold= 11.6V  → emergency shutdown to avoid damage
+    //
+    // For 12V LiFePO4 (4S battery pack):
+    // batteryLowThreshold     = 12.4V  → early warning (~20–30%)
+    // batteryCriticalThreshold= 11.6V  → safe cutoff region
+    
+    float batteryLowThreshold = 12.1;      
+    // Warning level: start reducing load / notify user & enter light sleep
+    
+    float batteryCriticalThreshold = 11.6; 
+    // Emergency level: enter deep sleep to protect battery
+
     uint32_t sensorReadInterval = 5000;
     uint32_t mqttPublishInterval = 10000;
 
