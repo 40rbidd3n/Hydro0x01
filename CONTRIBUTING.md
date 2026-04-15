@@ -1,6 +1,6 @@
-# Contributing to HydroOne
+# Contributing to HydroponicOne
 
-First off, thank you for considering contributing to HydroOne! It's people like you that make HydroOne such a great tool for the hydroponics community.
+First off, thank you for considering contributing to HydroponicOne! It's people like you that make HydroponicOne such a great tool for the hydroponics community.
 
 ## 🚀 How Can I Contribute?
 
@@ -35,7 +35,7 @@ First off, thank you for considering contributing to HydroOne! It's people like 
 - Keep components small and focused.
 
 ### Hardware (PCB & 3D Design)
-HydroOne is a physical system, and hardware contributions are highly encouraged!
+HydroponicOne is a physical system, and hardware contributions are highly encouraged!
 - **PCBs / Schematics**: Please submit designs in KiCad format. Include gerber files for easy viewing.
 - **3D Printed Parts**: If contributing sensor mounts or waterproof enclosures, please provide `.STL` files and ideally the original CAD files (STEP, Fusion360, FreeCAD) so others can modify them.
 - Ensure all 3D designs mention the recommended material (e.g., PETG or ABS for UV/water resistance versus PLA).

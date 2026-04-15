@@ -1,8 +1,8 @@
-# OpenHydroponic AI Coding Agent Instructions
+# HydroponicOne AI Coding Agent Instructions
 
 ## Project Overview
 
-**OpenHydroponic** is a production-grade IoT hydroponic control platform consisting of:
+**HydroponicOne** is a production-grade IoT hydroponic control platform consisting of:
 - **Firmware**: ESP32 nodes running custom C++ with deep-sleep, sensors (DHT11, DS18B20, HC-SR04, etc.), MQTT, and OTA support
 - **Backend**: Node.js/TypeScript REST API + MQTT bridge + WebSocket real-time telemetry ingestion
 - **Frontend**: (Not yet implemented) React/Vue dashboard
@@ -26,10 +26,10 @@ Dashboard (frontend/)
 ## Critical Patterns & Conventions
 
 ### 1. MQTT Topic Hierarchy and Naming
-- **Base topic** (from env): `MQTT_BASE_TOPIC` (default: `"OpenHydroponic"`)
+- **Base topic** (from env): `MQTT_BASE_TOPIC` (default: `"HydroOne"`)
 - **Sensor telemetry topics** (published by device): `{BASE_TOPIC}/{DEVICE_ID}/sensors/{sensor_type}/{sensor_name}` or `{BASE_TOPIC}/{DEVICE_ID}/power/{power_type}`
-  - Example: `OpenHydroponic/HydroNode_01/sensors/water/temperature`
-  - Example: `OpenHydroponic/HydroNode_01/power/battery`
+  - Example: `HydroOne/HydroNode_01/sensors/water/temperature`
+  - Example: `HydroOne/HydroNode_01/power/battery`
   - Payloads: Numeric (e.g., `22.5`) or JSON `{"value": 22.5}`
 - **Commands published by backend**: `{BASE_TOPIC}/{DEVICE_ID}/cmd/{command}`
   - Examples: `cmd/pump`, `cmd/mode`, `cmd/config`, `cmd/ota`, `cmd/tank`

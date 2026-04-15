@@ -1,8 +1,8 @@
 # System Overview
 
-HydroOne is a professional-grade, open-source IoT hydroponic control system. It is designed to bridge the gap between hobbyist DIY projects and industrial automation.
+HydroponicOne is a professional-grade, open-source IoT hydroponic control system. It is designed to bridge the gap between hobbyist DIY projects and industrial automation.
 
-![HydroOne Architecture](../assets/diagrams/hydroone-architecture-master.png)
+![HydroponicOne Architecture](../assets/diagrams/HydroponicOne-architecture-master.png)
 *Figure 1: High-level System Architecture*
 
 ```mermaid

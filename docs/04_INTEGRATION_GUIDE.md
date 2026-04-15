@@ -243,21 +243,21 @@ automation:
 
 ## 📱 Native Notification Alerts (Telegram & Discord)
 
-HydroOne supports built-in notification alerts directly from the system backend, so you don't necessarily need Node-RED for basic notifications. You can configure these directly in the HydroOne configuration dashboard.
+HydroponicOne supports built-in notification alerts directly from the system backend, so you don't necessarily need Node-RED for basic notifications. You can configure these directly in the HydroponicOne configuration dashboard.
 
 <p align="center">
-<img src="../assets/images/Screenshot-HydroOne-Telegram-Alert.jpeg" width="30%">
+<img src="../assets/images/Screenshot-HydroponicOne-Telegram-Alert.jpeg" width="30%">
 </p>
 
 ### Telegram Setup
 1. Create a bot using [@BotFather](https://t.me/botfather) on Telegram and copy the `botToken`.
 2. Find your `chatId` (you can use [@userinfobot](https://t.me/userinfobot) to get your ID).
-3. In the HydroOne Configuration page, enable Telegram, enter your credentials, and click Save.
+3. In the HydroponicOne Configuration page, enable Telegram, enter your credentials, and click Save.
 
 ### Discord Setup
 1. In your Discord server, go to Channel Settings -> Integrations -> Webhooks.
 2. Create a new webhook and copy the `webhookUrl`.
-3. In the HydroOne Configuration page, enable Discord, enter the URL, and click Save.
+3. In the HydroponicOne Configuration page, enable Discord, enter the URL, and click Save.
 
 ---
 
@@ -508,7 +508,7 @@ automation:
 
 ## ☁️ Free Cloud & Managed Services Tier Options
 
-For teams and enthusiasts who want to deploy the HydroOne dashboard online globally without local homelab or server maintenance costs, we highly recommend taking advantage of "forever free" developer tiers offered by modern managed services.
+For teams and enthusiasts who want to deploy the HydroponicOne dashboard online globally without local homelab or server maintenance costs, we highly recommend taking advantage of "forever free" developer tiers offered by modern managed services.
 
 ### 🌐 Frontend & Node.js Backend Hosting
 You do not need to pay for a VPS! The Fastify API and the React/Vite dashboard can be hosted at zero cost:
@@ -523,11 +523,11 @@ To securely store device records, configurations, and user accounts in the cloud
 
 ### 📈 Time-Series Telemetry Database
 For lightning-fast sensor graphs natively integrating with our Fastify backend:
-* **[InfluxDB Cloud Serverless](https://cloud2.influxdata.com/signup)**: Excellent free-tier (No credit card needed). Supports 30 days of data retention for metrics/telemetry which perfectly matches HydroOne's high-frequency sensor writes without blowing quotas.
+* **[InfluxDB Cloud Serverless](https://cloud2.influxdata.com/signup)**: Excellent free-tier (No credit card needed). Supports 30 days of data retention for metrics/telemetry which perfectly matches HydroponicOne's high-frequency sensor writes without blowing quotas.
 
 ### 📡 Cloud MQTT Broker
 If you don't want to run `mosquitto` locally for your ESP32:
-* **[HiveMQ Cloud](https://www.hivemq.com/mqtt-cloud-broker/)**: The standard for IoT. Offers a free starter plan allowing up to 100 concurrent devices (more than enough for a HydroOne farm deployment).
+* **[HiveMQ Cloud](https://www.hivemq.com/mqtt-cloud-broker/)**: The standard for IoT. Offers a free starter plan allowing up to 100 concurrent devices (more than enough for a HydroponicOne farm deployment).
 * **[EMQX Cloud Serverless](https://www.emqx.com/en/cloud/serverless)**: Another fantastic, fully managed cloud MQTT broker with 1 million free session minutes per month.
 
 ---

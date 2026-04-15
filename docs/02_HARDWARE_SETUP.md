@@ -456,9 +456,9 @@ Device (−) ──→ Battery/Power (−)
 
 ## 📐 Calibration Procedures (Using Web Dashboard)
 
-HydroOne features a seamless, remote calibration interface driven by MQTT. **You no longer need to hardcode values in C++!**
+HydroponicOne features a seamless, remote calibration interface driven by MQTT. **You no longer need to hardcode values in C++!**
 
-Navigate to the **`/calibration`** page on your HydroOne web dashboard to live-stream sensor readings and apply offsets securely over-the-air.
+Navigate to the **`/calibration`** page on your HydroponicOne web dashboard to live-stream sensor readings and apply offsets securely over-the-air.
 
 ### Tank / Reservoir Calibration
 1. Fix your ultrasonic sensor in place (see mounting instructions above). Empty your reservoir or let water settle completely.

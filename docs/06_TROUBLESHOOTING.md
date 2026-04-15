@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Use this guide to resolve common issues with HydroOne.
+Use this guide to resolve common issues with HydroponicOne.
 
 ## 📡 Connectivity Issues
 

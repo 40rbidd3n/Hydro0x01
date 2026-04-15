@@ -1,4 +1,4 @@
-name: HydroOne CI
+name: HydroponicOne CI
 
 on:
   push:

@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Create a report to help us improve HydroOne
+about: Create a report to help us improve HydroponicOne
 title: "[BUG] "
 labels: bug
 assignees: ''

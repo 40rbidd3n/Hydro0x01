@@ -1,6 +1,6 @@
 # Modular Sensor Architecture
 
-The HydroOne firmware uses a memory-safe, hardware-agnostic architecture for environmental sensors. This design ensures that adding new sensors (like the AHT20) does not require changes to the core business logic or the `SensorManager`.
+The HydroponicOne firmware uses a memory-safe, hardware-agnostic architecture for environmental sensors. This design ensures that adding new sensors (like the AHT20) does not require changes to the core business logic or the `SensorManager`.
 
 ## Core Principles
 

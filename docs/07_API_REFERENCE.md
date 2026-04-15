@@ -1,6 +1,6 @@
 # REST API & MQTT Reference
 
-This document serves as the complete technical specification for the HydroOne API. 
+This document serves as the complete technical specification for the HydroponicOne API. 
 
 ---
 

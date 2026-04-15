@@ -1,6 +1,6 @@
 # Firmware Guide
 
-The HydroOne firmware is the heart of your edge device. It is designed to be robust, memory-safe, and highly configurable.
+The HydroponicOne firmware is the heart of your edge device. It is designed to be robust, memory-safe, and highly configurable.
 
 ## 🛠️ Environment Setup
 
@@ -27,7 +27,7 @@ For production deployments, we strongly recommend enabling **Strict Security**. 
 - 🔐 [**Security & OTA Guide**](./08_SECURITY_OTA.md) — How to generate keys and sign binaries.
 
 ### 3. Sensor Selection & Build Environments
-You must build the firmware version that matches your hardware setup. HydroOne uses **PlatformIO environments** to compile only the necessary drivers, saving memory.
+You must build the firmware version that matches your hardware setup. HydroponicOne uses **PlatformIO environments** to compile only the necessary drivers, saving memory.
 
 In `platformio.ini`, select your Default Environment (`default_envs`) or build a specific one:
 - **`esp32_dht_bmp`**: Combines a DHT11/22 and a BMP280.
@@ -40,14 +40,14 @@ In `platformio.ini`, select your Default Environment (`default_envs`) or build a
 
 ## 🔄 OTA (Over-The-Air) Updates
 
-HydroOne supports secure remote updates. To deploy a new version:
+HydroponicOne supports secure remote updates. To deploy a new version:
 1.  Increase the `VERSION` define in `config.h`.
 2.  Build the binary: `pio run`.
-3.  Upload the `.bin` file via the HydroOne Dashboard.
+3.  Upload the `.bin` file via the HydroponicOne Dashboard.
 
 ## 🧠 Control Logic & Dosing
 
-HydroOne uses a reactive control loop to maintain reservoir parameters.
+HydroponicOne uses a reactive control loop to maintain reservoir parameters.
 
 ```mermaid
 graph TD

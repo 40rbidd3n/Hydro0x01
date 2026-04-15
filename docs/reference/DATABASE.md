@@ -1,6 +1,6 @@
 # Database Architecture
 
-HydroOne uses a dual-database approach to handle structured configuration and high-frequency telemetry data efficiently.
+HydroponicOne uses a dual-database approach to handle structured configuration and high-frequency telemetry data efficiently.
 
 ## 🐘 PostgreSQL (Prisma)
 Used for structured, relational data that requires ACID compliance and complex querying.

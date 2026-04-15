@@ -1,6 +1,6 @@
 # Security & OTA Firmware Updates
 
-HydroOne is built for production environments where security and reliability are paramount. This guide explains how to enable firmware signing and manage secure Over-The-Air (OTA) updates.
+HydroponicOne is built for production environments where security and reliability are paramount. This guide explains how to enable firmware signing and manage secure Over-The-Air (OTA) updates.
 
 ## 🛠️ Security Configuration
 
@@ -34,7 +34,7 @@ graph TD
     end
 
     subgraph "Cloud / Deployment"
-        IoT["HydroOne Dashboard"]
+        IoT["HydroponicOne Dashboard"]
         IoT -- "Send via MQTT" --> Payload["{ url, hash, signature }"]
     end
 
@@ -59,7 +59,7 @@ graph TD
 
 ## 🔑 Managing RSA Keys
 
-HydroOne uses RSA-2048 signing. You must generate a public/private key pair.
+HydroponicOne uses RSA-2048 signing. You must generate a public/private key pair.
 
 ### Automated Key Generation
 Run the following script from the project root:
@@ -101,7 +101,7 @@ Output:
 [*] SHA256:   a1b2c3d4e5f6...
 
 ============================================================
- SIGNED OTA CREDENTIALS — Paste into HydroOne Dashboard
+ SIGNED OTA CREDENTIALS — Paste into HydroponicOne Dashboard
 ============================================================
 
   SHA256:    a1b2c3d4e5f6...
@@ -122,7 +122,7 @@ This serves files from `.pio/build/dht_bmp/` over HTTPS on port 8443. The URL yo
 `https://<YOUR_LOCAL_IP>:8443/firmware.bin`
 
 ### 4. Deploy via Dashboard
-1. Navigate to the **OTA Firmware Update** page in the HydroOne dashboard.
+1. Navigate to the **OTA Firmware Update** page in the HydroponicOne dashboard.
 2. Enter the firmware URL and a version string (for your own reference).
 3. Click the **🛡 Shield** toggle to enable **Secure Mode**.
 4. Paste the SHA256 hash and Base64 signature from the script output.

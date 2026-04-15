@@ -1,8 +1,8 @@
 # Calibration Guide
 
-Precise readings are the difference between a thriving garden and a failed crop. HydroOne provides built-in tools to calibrate your sensors via the dashboard.
+Precise readings are the difference between a thriving garden and a failed crop. HydroponicOne provides built-in tools to calibrate your sensors via the dashboard.
 
-![Calibration Page](../assets/images/Screenshot-HydroOne-calibration.png)
+![Calibration Page](../assets/images/Screenshot-HydroponicOne-calibration.png)
 
 ```mermaid
 graph LR
@@ -43,7 +43,7 @@ graph LR
 4.  Click **Calibrate PH7** in the UI.
 5.  Rinse the probe and repeat for **pH 4.0**.
 
-![pH Calibration](../assets/images/Screenshot-HydroOne-ph-calibration.png)
+![pH Calibration](../assets/images/Screenshot-HydroponicOne-ph-calibration.png)
 
 ## ⚡ EC (Conductivity) Calibration
 
@@ -52,7 +52,7 @@ graph LR
 3.  Submerge in a known solution (e.g., 1.41 mS/cm).
 4.  Enter the solution value in the Dashboard and click **Calibrate Scale**.
 
-![EC Calibration](../assets/images/Screenshot-HydroOne-ec-calibration.png)
+![EC Calibration](../assets/images/Screenshot-HydroponicOne-ec-calibration.png)
 
 ## 📏 Reservoir (Tank) Calibration
 

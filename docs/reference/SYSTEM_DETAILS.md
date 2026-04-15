@@ -1,7 +1,7 @@
-# HydroOne System Architecture
+# HydroponicOne System Architecture
 
 ## Overview
-HydroOne utilizes a high-performance, schema-driven architecture using Fastify and an edge-compatible React dashboard using Vite.
+HydroponicOne utilizes a high-performance, schema-driven architecture using Fastify and an edge-compatible React dashboard using Vite.
 
 ## Data Infrastructure
 1. **ESP32 Firmware**: Written in modern C++, communicates via MQTT.

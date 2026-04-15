@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/branding/hydroOne-logo.png" alt="HydroOne Logo" width="600">
+  <img src="assets/branding/HydroponicOne-logo.png" alt="HydroponicOne Logo" width="600">
 </p>
 <p align="center">
   <strong>Production-Grade Open Source IoT Hydroponic Control System</strong>
@@ -13,9 +13,9 @@
 
 ---
 
-**HydroOne** is a robust, modular, and professional-grade hydroponic monitoring and control system. It aims to bridge the gap between hobbyist DIY setups and expensive industrial automation. Featuring a modern tech stack including MQTT, InfluxDB telemetry, and a sleek React-based dashboard.
+**HydroponicOne** is a robust, modular, and professional-grade hydroponic monitoring and control system. It aims to bridge the gap between hobbyist DIY setups and expensive industrial automation. Featuring a modern tech stack including MQTT, InfluxDB telemetry, and a sleek React-based dashboard.
 
-![system overview](assets/images/HydroOne-system-overview.png)
+![system overview](assets/images/HydroponicOne-system-overview.png)
 
 ## ✨ Features
 - **Real-Time Environment Monitoring**: High-precision tracking of pH, EC, water level, temperature, and humidity.
@@ -37,7 +37,7 @@
 | **DevOps** | Docker support, GitHub Actions, Secure OTA deployment |
 
 <p align="center">
-  <img src="assets/diagrams/hydroone-network-topology.png" alt="HydroOne System Architecture" width="100%">
+  <img src="assets/diagrams/HydroponicOne-network-topology.png" alt="HydroponicOne System Architecture" width="100%">
 </p>
 
 ---
@@ -59,7 +59,7 @@ Ensure you have the following installed before proceeding:
 **1. Clone the repository**
 ```bash
 git clone https://github.com/40rbidd3n/Hydro0x01.git
-cd HydroOne
+cd HydroponicOne
 ```
 
 **2. Setup Backend**
@@ -119,7 +119,7 @@ Explore our comprehensive guides located in the `docs/` folder:
 
 ## 🤝 Contributing
 
-We actively welcome community contributions to improve HydroOne! Please see our [**Contributing Guidelines**](CONTRIBUTING.md) and our [**Code of Conduct**](CODE_OF_CONDUCT.md) before submitting pull requests.
+We actively welcome community contributions to improve HydroponicOne! Please see our [**Contributing Guidelines**](CONTRIBUTING.md) and our [**Code of Conduct**](CODE_OF_CONDUCT.md) before submitting pull requests.
 
 ## 📄 License
 
