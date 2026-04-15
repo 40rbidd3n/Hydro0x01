@@ -4,6 +4,37 @@ Precise readings are the difference between a thriving garden and a failed crop.
 
 ![Calibration Page](../assets/images/Screenshot-HydroOne-calibration.png)
 
+```mermaid
+graph LR
+    subgraph "User Interface"
+        UI["React Dashboard"]
+        Live["Live Data Window"]
+    end
+
+    subgraph "Asynchronous Messaging (MQTT)"
+        Broker["MQTT Broker"]
+    end
+
+    subgraph "Edge Node (ESP32)"
+        Device["Firmware Controller"]
+        LFS[("LittleFS (config.json)")]
+        Sensors["Raw Voltages / ADC"]
+    end
+
+    %% Flow
+    Sensors -- "Raw Data" --> Device
+    Device -- "telemetry:status" --> Broker
+    Broker -- "Update UI" --> Live
+
+    UI -- "cmd:calibrate {midpoint}" --> Broker
+    Broker -- "Command" --> Device
+    Device -- "Map & Save" --> LFS
+    LFS -- "Applied Offset" --> Device
+    Device -- "Pub Confirmation" --> Broker
+    Broker -- "Success Notification" --> UI
+```
+
+
 ## 🧪 pH Calibration (Two-Point)
 
 1.  Prepare pH 4.0 and pH 7.0 buffer solutions.

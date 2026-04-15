@@ -23,6 +23,36 @@ Uncomment the following line in `config.h`:
 
 ![Security Model](../assets/diagrams/ota-security-workflow.png)
 
+```mermaid
+graph TD
+    subgraph "Developer / Build Server"
+        Bin["firmware.bin"]
+        Key[("Private Key (.pem)")]
+        Sign["Signing Script"]
+        Bin -- "Compute" --> Hash["SHA256 Hash"]
+        Hash & Key -- "RSA Sign" --> Signature["Signature (Base64)"]
+    end
+
+    subgraph "Cloud / Deployment"
+        IoT["HydroOne Dashboard"]
+        IoT -- "Send via MQTT" --> Payload["{ url, hash, signature }"]
+    end
+
+    subgraph "Edge Device (ESP32)"
+        Pub[("Public Key (LittleFS)")]
+        ESP["OTA Manager"]
+        
+        Payload -- "1. Verify Sig" --> ESP
+        Pub -- "RSA Verify" --> ESP
+        
+        ESP -- "2. Download" --> HTTPS["HTTPS Firmware"]
+        HTTPS -- "3. Validate" --> ESP
+        ESP -- "Compute local SHA256" --> Match{"Match?"}
+        Match -- "YES" --> Flash["Update Partition & Reboot"]
+        Match -- "NO" --> Abort["Abort & Rollback"]
+    end
+```
+
 **Why this works:** An attacker cannot forge a valid signature without your private key. Even if they intercept the MQTT payload, they cannot substitute a malicious binary because the SHA256 won't match.
 
 ---

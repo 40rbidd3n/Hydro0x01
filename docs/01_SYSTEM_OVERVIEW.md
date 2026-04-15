@@ -2,8 +2,44 @@
 
 HydroOne is a professional-grade, open-source IoT hydroponic control system. It is designed to bridge the gap between hobbyist DIY projects and industrial automation.
 
-![HydroOne Architecture](../assets/diagrams/hydroone-network-topology.png)
+![HydroOne Architecture](../assets/diagrams/hydroone-architecture-master.png)
 *Figure 1: High-level System Architecture*
+
+```mermaid
+graph TD
+    subgraph "Edge Layer (ESP32)"
+        Device["IoT Node (ESP32)"]
+        Sensors["Environment Sensors (I2C/Analog)"]
+        Actuators["Relays / Pumps"]
+        Device <--> Sensors
+        Device <--> Actuators
+    end
+
+    subgraph "Communication Layer (MQTT)"
+        Broker["MQTT Broker (HiveMQ/Mosquitto)"]
+    end
+
+    subgraph "Cloud / Intelligence Layer (Fastify)"
+        Backend["Fastify API Server"]
+        InfluxDB[("InfluxDB (Telemetry)")]
+        PostgreSQL[("PostgreSQL (State/Config)")]
+        Backend <--> InfluxDB
+        Backend <--> PostgreSQL
+    end
+
+    subgraph "Presentation Layer (React)"
+        Frontend["Vite + React Dashboard"]
+    end
+
+    %% Data Flow
+    Device -- "Telemetry (MQTT v5)" --> Broker
+    Broker -- "Forward" --> Backend
+    Backend -- "Real-time Update (Socket.io)" --> Frontend
+    Frontend -- "REST Commands" --> Backend
+    Backend -- "Control Dispath (MQTT)" --> Broker
+    Broker -- "Command" --> Device
+```
+
 
 ## 🏗️ Core Architecture
 

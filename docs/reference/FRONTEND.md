@@ -11,6 +11,36 @@ We use **Zustand** (`src/store/useHydroStore.ts`) to manage:
 ### Real-Time Pipeline
 `services/socket.ts` connects to Fastify. Upon receiving `telemetry:update` payloads, it pushes directly into the Zustand store. React components passively listen to these hook changes and re-render efficiently.
 
+```mermaid
+graph TD
+    subgraph "Data Stream"
+        Socket["socket.service.ts"]
+        API["api.service.ts"]
+    end
+
+    subgraph "Central State (Zustand)"
+        Store["useHydroStore.ts"]
+        T_State["Telemetry State"]
+        C_State["Config State"]
+        Store --- T_State
+        Store --- C_State
+    end
+
+    subgraph "React Components (UI)"
+        Dash["Dashboard.tsx"]
+        Sensors["SensorCard.tsx"]
+        Controls["ControlPanel.tsx"]
+    end
+
+    %% Flow
+    Socket -- "telemetry:update" --> Store
+    API -- "fetch/update" --> Store
+    
+    Store -- "selector" --> Sensors
+    Sensors -- "render" --> Dash
+    Controls -- "trigger" --> API
+```
+
 ### Component Structure
 - `Dashboard.tsx`: Main layout wrapper.
 - `SensorCard.tsx`: Reusable modular display for environmental readouts.

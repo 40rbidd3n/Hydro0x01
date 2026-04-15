@@ -55,8 +55,43 @@ Command topics are used to trigger actions or update runtime configurations.
 | `diagnostics` | General hardware health alerts. |
 | `status` (LWT) | The "Last Will" topic used to detect if the device has gone offline. |
 
-**Availability Pattern (LWT)**:
-- **Topic**: `status`
-- **Offline Payload**: `{"status": "offline"}`
-- **Retain**: `true`
-- **QoS**: `1`
+## 🔄 Data & Control Flow
+
+The following diagram illustrates the event-driven lifecycle of telemetry (outbound) and commands (inbound).
+
+```mermaid
+sequenceDiagram
+    participant Hardware as ESP32 (Hardware)
+    participant Broker as MQTT Broker
+    participant Backend as Fastify Backend
+    participant DB as InfluxDB / Postgres
+    participant UI as React Dashboard
+
+    Note over Hardware, UI: Telemetry Flow (Real-time Monitoring)
+    loop Every MQTT_PUBLISH_INTERVAL
+        Hardware->>Broker: Publish sensors/water/temperature (JSON/Float)
+        Broker->>Backend: Forward to subscriber
+        par
+            Backend->>DB: Write to InfluxDB (Retention: 30d)
+        and
+            Backend->>UI: Broadcast via Socket.io (telemetry:update)
+        end
+        UI->>UI: Update Zustand store & re-render Charts
+    end
+
+    Note over Hardware, UI: Command Flow (Remote Control)
+    UI->>Backend: REST POST /api/system/pump {"action":"on"}
+    Backend->>DB: Log Actuation to PostgreSQL (Prisma)
+    Backend->>Broker: Publish cmd/pump {"action":"on"}
+    Broker->>Hardware: Deliver command to subscriber
+    Hardware->>Hardware: Trigger Relay (Main Pump)
+    Hardware-->>Broker: Publish status {"pump":"ON"} (Confirmation)
+    Broker-->>Backend: Forward status update
+    Backend-->>UI: Sync UI state via Socket.io
+```
+
+---
+
+**Integration Level**: Professional IoT  
+**QoS Strategy**: Level 1 (At least once) for critical commands.  
+**Retain Policy**: Enabled for `status` (LWT) and `config` topics.

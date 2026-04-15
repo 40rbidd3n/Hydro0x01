@@ -10,6 +10,32 @@ Used for structured, relational data that requires ACID compliance and complex q
 - **SystemAlert**: Tracks diagnostic issues and health status across devices.
 - **ActuationLog**: Records every time a relay or pump is triggered (manual or automated).
 
+```mermaid
+erDiagram
+    SystemConfig {
+        string device_id PK
+        string name
+        float batteryLowThreshold
+        int sensorReadInterval
+    }
+    SystemAlert {
+        int id PK
+        string status
+        string message
+        datetime created_at
+    }
+    ActuationLog {
+        int id PK
+        string action
+        int duration
+        string result
+        datetime timestamp
+    }
+    
+    SystemConfig ||--o{ SystemAlert : "monitors"
+    SystemConfig ||--o{ ActuationLog : "controls"
+```
+
 ### ORM: Prisma
 We use Prisma for its type-safety and auto-generated client.
 - **Schema**: `backend/prisma/schema.prisma`

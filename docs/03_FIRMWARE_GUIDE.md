@@ -45,6 +45,36 @@ HydroOne supports secure remote updates. To deploy a new version:
 2.  Build the binary: `pio run`.
 3.  Upload the `.bin` file via the HydroOne Dashboard.
 
+## 🧠 Control Logic & Dosing
+
+HydroOne uses a reactive control loop to maintain reservoir parameters.
+
+```mermaid
+graph TD
+    Start((Loop Start)) --> Read[Read Sensors]
+    Read --> CheckMode{Mode == ACTIVE?}
+    
+    CheckMode -- "NO" --> Sleep[Wait for Interval]
+    CheckMode -- "YES" --> EvalPH{pH > Threshold?}
+    
+    EvalPH -- "YES" --> DosePH[Dose pH Down]
+    EvalPH -- "NO" --> EvalEC{EC < Threshold?}
+    
+    EvalEC -- "YES" --> DoseNut[Dose Nutrient A/B]
+    EvalEC -- "NO" --> ResLevel{Level < Critical?}
+    
+    ResLevel -- "YES" --> Alert[Publish Alert / Stop Pump]
+    ResLevel -- "NO" --> Sleep
+    
+    DosePH --> Cooldown[Wait for Mixing Cooldown]
+    DoseNut --> Cooldown
+    Cooldown --> Sleep
+    Sleep --> Start
+```
+
+### Sensor Integration
+The firmware uses a hardware-agnostic `SensorManager` that polls data into a `SensorData` struct.
+
 ## 🧪 Best Practices
 - **Calibrate early**: Use the dashboard's calibration tools for pH and EC before relying on readings.
 - **Power Management**: If running on batteries, ensure `USE_DEEP_SLEEP` is correctly configured.
