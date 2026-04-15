@@ -6,9 +6,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/40rbidd3n/Hydro0x01/stargazers"><img src="https://img.shields.io/github/stars/wshobson/agents?style=for-the-badge&color=2bbc78" alt="Stars"></a>
-  <a href="https://github.com/40rbidd3n/Hydro0x01/network/members"><img src="https://img.shields.io/github/forks/wshobson/agents?style=for-the-badge&color=2bbc78" alt="Forks"></a>
-  <a href="https://github.com/40rbidd3n/Hydro0x01/blob/main/LICENSE"><img src="https://img.shields.io/github/license/wshobson/agents?style=for-the-badge&color=2bbc78" alt="License"></a>
+  <a href="https://github.com/40rbidd3n/Hydro0x01/stargazers"><img src="https://img.shields.io/github/stars/40rbidd3n/Hydro0x01?style=for-the-badge&color=2bbc78" alt="Stars"></a>
+  <a href="https://github.com/40rbidd3n/Hydro0x01/network/members"><img src="https://img.shields.io/github/forks/40rbidd3n/Hydro0x01?style=for-the-badge&color=2bbc78" alt="Forks"></a>
+  <a href="https://github.com/40rbidd3n/Hydro0x01/blob/main/LICENSE"><img src="https://img.shields.io/github/license/40rbidd3n/Hydro0x01?style=for-the-badge&color=2bbc78" alt="License"></a>
 </p>
 
 ---
