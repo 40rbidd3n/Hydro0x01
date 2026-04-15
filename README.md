@@ -37,7 +37,7 @@
 | **DevOps** | Docker support, GitHub Actions, Secure OTA deployment |
 
 <p align="center">
-  <img src="assets/diagrams/hydroone-network-topology.png" alt="HydroOne System Architecture" width="100%">
+  <img src="assets/diagrams/hydroone-architecture-master.png" alt="HydroOne System Architecture" width="100%">
 </p>
 
 ---
