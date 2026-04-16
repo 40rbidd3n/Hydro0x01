@@ -70,3 +70,8 @@ docker/data/
 # --- Walkthrough ---
 walkthrough.md
 brain/
+
+# --- Tools ---
+tools/.venv
+.venv
+**/.venv

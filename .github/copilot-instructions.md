@@ -26,10 +26,10 @@ Dashboard (frontend/)
 ## Critical Patterns & Conventions
 
 ### 1. MQTT Topic Hierarchy and Naming
-- **Base topic** (from env): `MQTT_BASE_TOPIC` (default: `"HydroOne"`)
+- **Base topic** (from env): `MQTT_BASE_TOPIC` (default: `"HydroponicOne"`)
 - **Sensor telemetry topics** (published by device): `{BASE_TOPIC}/{DEVICE_ID}/sensors/{sensor_type}/{sensor_name}` or `{BASE_TOPIC}/{DEVICE_ID}/power/{power_type}`
-  - Example: `HydroOne/HydroNode_01/sensors/water/temperature`
-  - Example: `HydroOne/HydroNode_01/power/battery`
+  - Example: `HydroponicOne/HydroNode_01/sensors/water/temperature`
+  - Example: `HydroponicOne/HydroNode_01/power/battery`
   - Payloads: Numeric (e.g., `22.5`) or JSON `{"value": 22.5}`
 - **Commands published by backend**: `{BASE_TOPIC}/{DEVICE_ID}/cmd/{command}`
   - Examples: `cmd/pump`, `cmd/mode`, `cmd/config`, `cmd/ota`, `cmd/tank`

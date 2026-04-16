@@ -89,7 +89,7 @@
 #endif
 
 // MQTT Topics (hierarchical structure)
-#define MQTT_BASE_TOPIC "HydroOne"
+#define MQTT_BASE_TOPIC "HydroponicOne"
 #define MQTT_DEVICE_TOPIC MQTT_BASE_TOPIC "/" SYSTEM_NAME
 
 // Telemetry topics

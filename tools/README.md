@@ -1,9 +1,11 @@
-# HydroOne Tools
+# HydroponicOne Tools
 
 ## simulator.py
 
+![HydroponicOne Simulator Demo](./hydroponicone_demo_simulator_to_react-dashboard.gif)
+
 A CLI simulator that publishes fake ESP32 telemetry on the exact MQTT topic
-schema used by HydroOne firmware. Use this to develop and demo the full stack
+schema used by HydroponicOne firmware. Use this to develop and demo the full stack
 without physical hardware.
 
 ### Install
@@ -12,6 +14,10 @@ without physical hardware.
 # Create and activate a virtual environment (recommended)
 python3 -m venv .venv
 source .venv/bin/activate
+
+# On windows
+python -m venv .venv
+.venv\Scripts\activate
 
 # Install Python dependencies
 pip install -r tools/requirements.txt
@@ -39,6 +45,14 @@ sudo apt install mosquitto
 mosquitto
 ```
 
+**Windows:**
+```bash
+# Download from https://mosquitto.org/download/
+# Run the installer
+# Start the broker
+mosquitto
+```
+
 ### Usage
 
 ```bash
@@ -49,15 +63,15 @@ python tools/simulator.py --no-mqtt
 python tools/simulator.py --broker localhost:1883
 
 # Against the public test broker
-python tools/simulator.py --broker test.mosquitto.org:1883
+python tools/simulator.py --broker broker.hivemq.com:1883
 ```
 
 ### Verify it's working
 
-In a second terminal, subscribe to all HydroOne topics:
+In a second terminal, subscribe to all HydroponicOne topics:
 
 ```bash
-mosquitto_sub -h localhost -t "HydroOne/#" -v
+mosquitto_sub -h localhost -t "HydroponicOne/#" -v
 ```
 
 You should see all 9 sensor topics streaming every 2 seconds.

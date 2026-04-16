@@ -56,9 +56,9 @@ export function AppLayout() {
         <div className="sidebar-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ color: 'var(--cyan)', cursor: 'pointer' }} onClick={handleLogoClick}>
-              <img src="/assets/logo-white.png" alt="HydroOne Logo" style={{ height: '45px' /*'24px'*/, width: 'auto' }} />
+              <img src="/assets/logo-white.png" alt="HydroponicOne Logo" style={{ height: '45px' /*'24px'*/, width: 'auto' }} />
             </div>
-            {/*<span style={{ fontWeight: 600, fontSize: 18 }}>HydroOne</span>*/}
+            {/*<span style={{ fontWeight: 600, fontSize: 18 }}>HydroponicOne</span>*/}
           </div>
           <button className="btn mobile-only" style={{ padding: 8 }} onClick={() => setSidebarOpen(false)}>
             <X size={20} />

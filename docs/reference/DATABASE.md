@@ -58,7 +58,7 @@ By default, telemetry data is kept for **30 days** to ensure the database stays 
 ---
 
 ## 🔄 Data Synchronization
-1.  **MQTT Ingest**: The backend subscribes to `HydroOne/HydroNode_01/sensors/#`.
+1.  **MQTT Ingest**: The backend subscribes to `HydroponicOne/HydroNode_01/sensors/#`.
 2.  **Validation**: Zod schema validates the JSON payload.
 3.  **Persistence**: 
     - Sensor data --> **InfluxDB**.

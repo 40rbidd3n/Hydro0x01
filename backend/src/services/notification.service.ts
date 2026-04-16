@@ -30,7 +30,7 @@ async function sendTelegram(token: string, chatId: string, alert: AlertNotificat
 
   // Format message
   const icon = alert.level === 'critical' ? '🚨' : alert.level === 'warning' ? '⚠️' : 'ℹ️';
-  let message = `<b>${icon} HydroOne Alert</b>\n\n`;
+  let message = `<b>${icon} HydroponicOne Alert</b>\n\n`;
   message += `<b>${alert.title}</b>\n`;
   message += `${alert.message}\n`;
   if (alert.device_id) {
@@ -60,7 +60,7 @@ async function sendDiscord(webhookUrl: string, alert: AlertNotification) {
   const icon = alert.level === 'critical' ? '🚨' : alert.level === 'warning' ? '⚠️' : 'ℹ️';
 
   const payload = {
-    username: "HydroOne System",
+    username: "HydroponicOne System",
     embeds: [
       {
         title: `${icon} ${alert.title}`,

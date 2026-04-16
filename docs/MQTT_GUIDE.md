@@ -1,9 +1,9 @@
 # MQTT v5 Technical Specification
 
-HydroponicOne utilizes **MQTT v5** as its primary real-time communication protocol. All topics are prefixed with the Base Topic (default: `HydroOne`) and the Device Name (default: `HydroNode_01`).
+HydroponicOne utilizes **MQTT v5** as its primary real-time communication protocol. All topics are prefixed with the Base Topic (default: `HydroponicOne`) and the Device Name (default: `HydroNode_01`).
 
 All topics are structured as: `{MQTT_BASE_TOPIC}/{SYSTEM_NAME}/...
-e.g. `HydroOne/HydroNode_01/sensors/water/temperature`
+e.g. `HydroponicOne/HydroNode_01/sensors/water/temperature`
 
 
 ## 📈 Telemetry Topics (Device -> Cloud)

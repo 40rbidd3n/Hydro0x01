@@ -88,8 +88,8 @@ def generate_ca_cert(force_ip=None, force_regen=False):
     private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
 
     subject = issuer = x509.Name([
-        x509.NameAttribute(NameOID.COMMON_NAME, u"HydroOne Local OTA"),
-        x509.NameAttribute(NameOID.ORGANIZATION_NAME, u"HydroOne"),
+        x509.NameAttribute(NameOID.COMMON_NAME, u"HydroponicOne Local OTA"),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, u"HydroponicOne"),
     ])
 
     san_entries = [
@@ -137,7 +137,7 @@ def generate_ca_cert(force_ip=None, force_regen=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="HydroOne OTA Key Generator",
+        description="HydroponicOne OTA Key Generator",
         formatter_class=argparse.RawTextHelpFormatter,
         epilog=(
             "Examples:\n"

@@ -12,74 +12,74 @@ mqtt:
   sensor:
     # Water Temperature
     - name: "Hydro Water Temperature"
-      state_topic: "HydroOne/HydroNode_01/sensors/water/temperature"
+      state_topic: "HydroponicOne/HydroNode_01/sensors/water/temperature"
       unit_of_measurement: "°C"
       device_class: temperature
       icon: mdi:thermometer-water
       
     # Air Temperature
     - name: "Hydro Air Temperature"
-      state_topic: "HydroOne/HydroNode_01/sensors/air/temperature"
+      state_topic: "HydroponicOne/HydroNode_01/sensors/air/temperature"
       unit_of_measurement: "°C"
       device_class: temperature
       icon: mdi:thermometer
       
     # Humidity
     - name: "Hydro Humidity"
-      state_topic: "HydroOne/HydroNode_01/sensors/air/humidity"
+      state_topic: "HydroponicOne/HydroNode_01/sensors/air/humidity"
       unit_of_measurement: "%"
       device_class: humidity
       icon: mdi:water-percent
       
     # Atmospheric Pressure
     - name: "Hydro Pressure"
-      state_topic: "HydroOne/HydroNode_01/sensors/air/pressure"
+      state_topic: "HydroponicOne/HydroNode_01/sensors/air/pressure"
       unit_of_measurement: "hPa"
       device_class: pressure
       icon: mdi:gauge
       
     # Water Level
     - name: "Hydro Water Level"
-      state_topic: "HydroOne/HydroNode_01/sensors/water/level"
+      state_topic: "HydroponicOne/HydroNode_01/sensors/water/level"
       icon: mdi:waves
       
     # Reservoir Distance
     - name: "Hydro Reservoir Distance"
-      state_topic: "HydroOne/HydroNode_01/sensors/reservoir/distance"
+      state_topic: "HydroponicOne/HydroNode_01/sensors/reservoir/distance"
       unit_of_measurement: "cm"
       icon: mdi:arrow-expand-vertical
       
     # pH Level
     - name: "Hydro pH"
-      state_topic: "HydroOne/HydroNode_01/sensors/water/ph"
+      state_topic: "HydroponicOne/HydroNode_01/sensors/water/ph"
       icon: mdi:ph
       
     # EC Level  
     - name: "Hydro EC"
-      state_topic: "HydroOne/HydroNode_01/sensors/water/ec"
+      state_topic: "HydroponicOne/HydroNode_01/sensors/water/ec"
       unit_of_measurement: "mS/cm"
       icon: mdi:lightning-bolt
       
     # Battery Voltage
     - name: "Hydro Battery"
-      state_topic: "HydroOne/HydroNode_01/power/battery"
+      state_topic: "HydroponicOne/HydroNode_01/power/battery"
       unit_of_measurement: "V"
       device_class: voltage
       icon: mdi:battery
       
     # System Status JSON
     - name: "Hydro System Status"
-      state_topic: "HydroOne/HydroNode_01/status"
+      state_topic: "HydroponicOne/HydroNode_01/status"
       value_template: "{{ value_json.state }}"
-      json_attributes_topic: "HydroOne/HydroNode_01/status"
+      json_attributes_topic: "HydroponicOne/HydroNode_01/status"
       icon: mdi:water-pump
 
   # Pump Control Switch
   switch:
     - name: "Hydro Pump"
-      state_topic: "HydroOne/HydroNode_01/status"
+      state_topic: "HydroponicOne/HydroNode_01/status"
       value_template: "{{ value_json.pump }}"
-      command_topic: "HydroOne/HydroNode_01/cmd/pump"
+      command_topic: "HydroponicOne/HydroNode_01/cmd/pump"
       payload_on: '{"action":"on","duration":30000}'
       payload_off: '{"action":"off"}'
       state_on: "on"
@@ -90,7 +90,7 @@ mqtt:
   binary_sensor:
     # Online Status
     - name: "Hydro System Online"
-      state_topic: "HydroOne/HydroNode_01/status"
+      state_topic: "HydroponicOne/HydroNode_01/status"
       value_template: "{{ value_json.status }}"
       payload_on: "online"
       payload_off: "offline"
@@ -237,7 +237,7 @@ automation:
     action:
       - service: mqtt.publish
         data:
-          topic: "HydroOne/HydroNode_01/cmd/pump"
+          topic: "HydroponicOne/HydroNode_01/cmd/pump"
           payload: '{"action":"on","duration":60000}'
 ```
 
@@ -270,7 +270,7 @@ HydroponicOne supports built-in notification alerts directly from the system bac
   {
     "id": "mqtt_in",
     "type": "mqtt in",
-    "topic": "HydroOne/HydroNode_01/sensors",
+    "topic": "HydroponicOne/HydroNode_01/sensors",
     "qos": "1",
     "broker": "mqtt_broker"
   },
@@ -304,7 +304,7 @@ if (waterLevel < 1500 && waterTemp < 28 && battery > 11.5) {
         action: "on",
         duration: 30000
     };
-    msg.topic = "HydroOne/HydroNode_01/cmd/pump";
+    msg.topic = "HydroponicOne/HydroNode_01/cmd/pump";
     return msg;
 }
 
@@ -321,14 +321,14 @@ Create a dashboard with gauges and charts:
   "widgets": [
     {
       "type": "gauge",
-      "topic": "HydroOne/HydroNode_01/sensors/water/temperature",
+      "topic": "HydroponicOne/HydroNode_01/sensors/water/temperature",
       "min": 0,
       "max": 40,
       "label": "Water Temp"
     },
     {
       "type": "chart",
-      "topic": "HydroOne/HydroNode_01/sensors/water/ph",
+      "topic": "HydroponicOne/HydroNode_01/sensors/water/ph",
       "hours": 24,
       "label": "pH History"
     }
@@ -424,7 +424,7 @@ automation:
     action:
       - service: mqtt.publish
         data:
-          topic: "HydroOne/HydroNode_01/cmd/pump"
+          topic: "HydroponicOne/HydroNode_01/cmd/pump"
           payload: '{"action":"on","duration":30000}'
 ```
 
@@ -441,8 +441,8 @@ mosquitto_passwd -c /etc/mosquitto/passwd hydro_user
 ```
 # /etc/mosquitto/acls
 user hydro_user
-topic read HydroOne/#
-topic write HydroOne/#
+topic read HydroponicOne/#
+topic write HydroponicOne/#
 ```
 
 3. **Enable TLS:**
@@ -500,7 +500,7 @@ automation:
     action:
       - service: mqtt.publish
         data_template:
-          topic: "HydroOne/HydroNode_01/cmd/pump"
+          topic: "HydroponicOne/HydroNode_01/cmd/pump"
           payload: '{"action":"on","duration":{{ trigger.calendar_event.description }}}'
 ```
 

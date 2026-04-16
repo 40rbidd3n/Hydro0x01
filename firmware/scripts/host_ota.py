@@ -48,7 +48,7 @@ def start_server(port, directory):
     firmware_url = f"https://{local_ip}:{port}/firmware.bin"
 
     print("=" * 60)
-    print("  HydroOne Local HTTPS OTA Server")
+    print("  HydroponicOne Local HTTPS OTA Server")
     print("=" * 60)
     print(f"  Serving:   {directory}")
     print(f"  Firmware URL (use this in dashboard):")
@@ -69,7 +69,7 @@ def start_server(port, directory):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="HydroOne Local HTTPS OTA Server",
+        description="HydroponicOne Local HTTPS OTA Server",
         formatter_class=argparse.RawTextHelpFormatter,
         epilog=(
             "Examples:\n"

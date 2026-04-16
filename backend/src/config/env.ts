@@ -5,7 +5,7 @@ const envSchema = z.object({
   MQTT_PORT: z.string().optional(),
   MQTT_USER: z.string().optional(),
   MQTT_PASSWORD: z.string().optional(),
-  MQTT_BASE_TOPIC: z.string().default('HydroOne'),
+  MQTT_BASE_TOPIC: z.string().default('HydroponicOne'),
 
   INFLUX_URL: z.string(),
   INFLUX_TOKEN: z.string(),

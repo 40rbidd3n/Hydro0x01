@@ -37,6 +37,6 @@ graph LR
 ```
 
 ## Data Flow
-- **Telemetry**: Device -> MQTT (`HydroOne/HydroNode_01/sensors/...`) -> Fastify Backend (MQTT Subscriber) -> Parallel Write: InfluxDB + Socket.io broadcast -> Frontend Zustand store.
-- **Commands**: Frontend Control Panel -> REST API (`POST /api/system/*`) -> Fastify Backend logs to Prisma -> Fastify publishes to MQTT (`HydroOne/HydroNode_01/cmd/*`) -> Device actions hardware.
+- **Telemetry**: Device -> MQTT (`HydroponicOne/HydroNode_01/sensors/...`) -> Fastify Backend (MQTT Subscriber) -> Parallel Write: InfluxDB + Socket.io broadcast -> Frontend Zustand store.
+- **Commands**: Frontend Control Panel -> REST API (`POST /api/system/*`) -> Fastify Backend logs to Prisma -> Fastify publishes to MQTT (`HydroponicOne/HydroNode_01/cmd/*`) -> Device actions hardware.
 

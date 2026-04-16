@@ -3,12 +3,12 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
-    container_name: hydroone_db
+    container_name: HydroponicOne_db
     restart: unless-stopped
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: hydroone
+      POSTGRES_DB: HydroponicOne
     ports:
       - "5432:5432"
     volumes:
@@ -16,7 +16,7 @@ services:
 
   influxdb:
     image: influxdb:2.7-alpine
-    container_name: hydroone_influxdb
+    container_name: HydroponicOne_influxdb
     restart: unless-stopped
     environment:
       DOCKER_INFLUXDB_INIT_MODE: setup
@@ -32,7 +32,7 @@ services:
 
   mosquitto:
     image: eclipse-mosquitto:2
-    container_name: hydroone_mosquitto
+    container_name: HydroponicOne_mosquitto
     restart: unless-stopped
     ports:
       - "1883:1883"
@@ -46,7 +46,7 @@ services:
     build: 
       context: ../backend
       dockerfile: Dockerfile
-    container_name: hydroone_backend
+    container_name: HydroponicOne_backend
     restart: unless-stopped
     depends_on:
       - db
@@ -55,7 +55,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/hydroone
+      - DATABASE_URL=postgresql://user:password@db:5432/HydroponicOne
       - INFLUX_URL=http://influxdb:8086
       - INFLUX_TOKEN=super-secret-influx-token
       - INFLUX_ORG=hydro_org
@@ -64,7 +64,7 @@ services:
       - MQTT_PORT=1883
       - MQTT_USER=
       - MQTT_PASSWORD=
-      - MQTT_BASE_TOPIC=HydroOne
+      - MQTT_BASE_TOPIC=HydroponicOne
       - PORT=3000
       - FRONTEND_ORIGIN=http://localhost:80
       - JWT_SECRET=change_me_in_production_run_openssl_rand_base64_32
@@ -75,7 +75,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_URL: http://localhost:3000
-    container_name: hydroone_frontend
+    container_name: HydroponicOne_frontend
     restart: unless-stopped
     depends_on:
       - backend

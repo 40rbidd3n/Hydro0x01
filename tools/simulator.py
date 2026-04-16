@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-HydroOne ESP32 Node Simulator
+HydroponicOne ESP32 Node Simulator
 tools/simulator.py
 
 Publishes fake sensor telemetry on the exact MQTT topic schema used by
-HydroOne firmware.  Listens for cmd/ topics and reacts like real hardware.
+HydroponicOne firmware.  Listens for cmd/ topics and reacts like real hardware.
 Run this instead of a physical ESP32 to develop/demo the full stack.
 
 Usage:
     python simulator.py                          # default broker: localhost:1883
     python simulator.py --broker 192.168.1.10   # remote broker
-    python simulator.py --broker test.mosquitto.org --port 1883
+    python simulator.py --broker broker.hivemq.com --port 1883
     python simulator.py --no-mqtt               # offline mode, no broker needed
 
 Controls (keyboard):
@@ -49,11 +49,16 @@ from rich import box
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-BASE_TOPIC   = "HydroOne"
+BASE_TOPIC   = "HydroponicOne"
 DEVICE_NAME  = "HydroNode_01"
 INTERVAL     = 2.0          # seconds between publishes (matches firmware default)
 TANK_MAX_L   = 20.0         # reservoir size in litres
 TANK_HEIGHT  = 30.0         # cm from sensor to bottom when full
+
+# Firmware-synced Pump Constants (from config.h)
+PUMP_MAX_ON_TIME   = 300000  # 5 minutes in ms
+PUMP_COOLDOWN_TIME = 120000  # 2 minutes in ms
+PUMP_MIN_ON_TIME   = 5000    # 5 seconds in ms
 
 # ── Realistic sensor physics ──────────────────────────────────────────────────
 
@@ -74,7 +79,10 @@ class SystemState:
         self.faults     = {}         # key → (magnitude, injected_at)
 
         # actuator state (updated by cmd/ subscriptions)
-        self.pump_on    = False
+        self.pump_state      = "OFF"   # OFF, ON, COOLDOWN, ERROR
+        self.pump_start_time = 0
+        self.pump_duration   = 0       # ms
+
         self.light_on   = True
         self.fan_on     = False
         self.mode       = "active"
@@ -143,7 +151,7 @@ class SystemState:
     def level_percent(self):
         # Slowly evaporates, pump refills when on
         base = max(5.0, 78.0 - (self.t / 3600.0) * 1.2)
-        if self.pump_on:
+        if self.pump_state == "ON":
             base = min(100.0, base + 0.5)
         v = base + noise(self.t * 0.0005, 77) * 0.8 + self._fault("level") * (-45.0)
         return round(max(0.0, min(100.0, v)), 1)
@@ -156,6 +164,18 @@ class SystemState:
 
     def level_litres(self):
         return round((self.level_percent() / 100.0) * TANK_MAX_L, 2)
+
+    def step_physics(self, dt):
+        """Update simulated world state transitions (timer based)."""
+        now_ms = self.elapsed() * 1000
+        if self.pump_state == "ON":
+            elapsed_pump = now_ms - self.pump_start_time
+            if elapsed_pump >= self.pump_duration:
+                self.pump_state = "COOLDOWN"
+                self.pump_start_time = int(now_ms)
+        elif self.pump_state == "COOLDOWN":
+            if now_ms - self.pump_start_time >= PUMP_COOLDOWN_TIME:
+                self.pump_state = "OFF"
 
     def all_sensors(self):
         return {
@@ -171,15 +191,62 @@ class SystemState:
         }
 
     def status_payload(self):
+        """Superset of status data for both TUI and MQTT broker."""
         return {
-            "rssi":      random.randint(-75, -45),
-            "heap_free": random.randint(120000, 180000),
+            # UI expected keys (backward compatibility for TUI)
+            "mode":      self.mode,
             "uptime_s":  int(self.elapsed()),
-            "pump":      "ON" if self.pump_on  else "OFF",
+            "faults":    list(self.faults.keys()),
+            
+            # Firmware/Production expected keys (for MQTT)
+            "timestamp": int(self.elapsed() * 1000),
+            "uptime":    int(self.elapsed()),
+            "state":     self.mode.upper(),
+            "wifi":      "connected",
+            "mqtt":      "connected",
+            "pump":      self.pump_state,
             "light":     "ON" if self.light_on else "OFF",
             "fan":       "ON" if self.fan_on   else "OFF",
-            "mode":      self.mode,
-            "faults":    list(self.faults.keys()),
+            "errors":    len(self.faults),
+            "heap":      random.randint(120000, 180000),
+            "firmware":  "1.0.0",
+            "rssi":      random.randint(-75, -45),
+        }
+
+    def sensors_status_payload(self):
+        """Returns health snapshot for individual sensors."""
+        return {
+            "ultrasonic":  {"enabled": True, "ok": self._fault("level") == 0},
+            "ph":          {"enabled": True, "ok": self._fault("ph") == 0},
+            "ec":          {"enabled": True, "ok": self._fault("ec") == 0},
+            "temperature": {"enabled": True, "ok": self._fault("temp") == 0},
+            "air":         {"enabled": True, "ok": True}
+        }
+
+    def aggregated_sensors_payload(self):
+        sensors = self.all_sensors()
+        return {
+            "timestamp": int(self.elapsed() * 1000),
+            "valid": True,
+            "water": {
+                "temperature": sensors["water_temp"],
+                "level": sensors["level_pct"],
+                "ph": sensors["ph"],
+                "ec": sensors["ec"],
+                "litres": sensors["level_litres"],
+                "percent": sensors["level_pct"]
+            },
+            "air": {
+                "temperature": sensors["air_temp"],
+                "humidity": sensors["humidity"],
+                "pressure": sensors["pressure"]
+            },
+            "reservoir": {
+                "distance": sensors["distance"]
+            },
+            "power": {
+                "battery": sensors.get("battery", 12.01)
+            }
         }
 
 
@@ -194,7 +261,7 @@ def make_client(state):
         return None
 
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,
-                         client_id=f"HydroOne-Sim-{random.randint(1000,9999)}")
+                         client_id=f"HydroponicOne-Sim-{random.randint(1000,9999)}")
 
     def on_connect(c, userdata, flags, rc, props=None):
         if rc == 0:
@@ -213,13 +280,31 @@ def make_client(state):
         ts = datetime.now()
         state.log.append((f"[cyan]← CMD {topic}[/cyan] {json.dumps(payload)}", ts))
 
-        # Simulate actuator reactions
+        # Simulate actuator reactions (matches PumpController::handleMQTTMessage)
         if topic == "pump":
             action = payload.get("action", "")
-            state.pump_on = (action == "on")
+            duration = payload.get("duration", 0)
+            
+            if action == "on":
+                # Check cooldown/safety (simplified)
+                if state.pump_state == "COOLDOWN":
+                    state.log.append(("[yellow]Warning: Pump in COOLDOWN[/yellow]", ts))
+                else:
+                    state.pump_state = "ON"
+                    state.pump_start_time = int(state.elapsed() * 1000)
+                    
+                    # Firmware limits enforcement
+                    if duration == 0: duration = PUMP_MAX_ON_TIME
+                    state.pump_duration = max(min(duration, PUMP_MAX_ON_TIME), PUMP_MIN_ON_TIME)
+                    
+                    state.log.append((f"[green]Pump Start ({state.pump_duration}ms)[/green]", ts))
+            elif action == "off":
+                state.pump_state = "OFF"
+                state.pump_start_time = 0
+                state.log.append(("[red]Manual Pump STOP (OFF)[/red]", ts))
+                
             state.mqtt_out.append(
-                (full_topic("status"),
-                 json.dumps({"pump": "ON" if state.pump_on else "OFF"}))
+                (full_topic("status"), json.dumps({"pump": state.pump_state}))
             )
         elif topic == "env":
             action = payload.get("action", "")
@@ -227,6 +312,49 @@ def make_client(state):
             if "light_off" in action: state.light_on = False
             if "fan_on"    in action: state.fan_on   = True
             if "fan_off"   in action: state.fan_on   = False
+        elif topic == "sensors":
+            action = payload.get("action", "")
+            if action == "status":
+                state.mqtt_out.append(
+                    (full_topic("sensors/status"), 
+                    json.dumps(state.sensors_status_payload()))
+                )
+                if c.is_connected():
+                    c.publish(full_topic("sensors/status"), 
+                              json.dumps(state.sensors_status_payload()))
+        
+        elif topic == "tank":
+            action = payload.get("action", "")
+            if action == "calibrate":
+                dist = state.reservoir_distance()
+                res = {"tank": "calibrated", "empty_distance_cm": dist}
+                state.mqtt_out.append((full_topic("status"), json.dumps(res)))
+                if c.is_connected():
+                    c.publish(full_topic("status"), json.dumps(res))
+        
+        elif topic == "ph":
+            point = payload.get("point", "")
+            res = {}
+            if point == "mid": res = {"ph_cal": "mid_done", "raw_voltage": 2.5}
+            elif point == "low": res = {"ph_cal": "complete", "slope": -5.9, "offset": 22.1}
+            elif point == "reset": res = {"ph_cal": "reset"}
+            
+            if res:
+                state.mqtt_out.append((full_topic("status"), json.dumps(res)))
+                if c.is_connected():
+                    c.publish(full_topic("status"), json.dumps(res))
+
+        elif topic == "ec":
+            point = payload.get("point", "")
+            res = {}
+            if point == "dry": res = {"ec_cal": "dry_done", "raw_voltage": 0.05}
+            elif point == "solution": res = {"ec_cal": "complete", "cell_constant": 1.95}
+            elif point == "reset": res = {"ec_cal": "reset"}
+            
+            if res:
+                state.mqtt_out.append((full_topic("status"), json.dumps(res)))
+                if c.is_connected():
+                    c.publish(full_topic("status"), json.dumps(res))
 
     client.on_connect = on_connect
     client.on_message = on_message
@@ -292,7 +420,12 @@ def build_sensor_table(s):
 def build_actuator_panel(s):
     st = s.status_payload()
     lines = []
-    lines.append(f"  Pump   [{'green' if st['pump']=='ON' else 'dim'}]{'■' if st['pump']=='ON' else '□'} {st['pump']}[/]")
+    
+    # Pump color mapping
+    p_color = "green" if st["pump"] == "ON" else "yellow" if st["pump"] == "COOLDOWN" else "dim"
+    p_icon  = "■" if st["pump"] == "ON" else "■" if st["pump"] == "COOLDOWN" else "□"
+    
+    lines.append(f"  Pump   [{p_color}]{p_icon} {st['pump']}[/]")
     lines.append(f"  Light  [{'yellow' if st['light']=='ON' else 'dim'}]{'■' if st['light']=='ON' else '□'} {st['light']}[/]")
     lines.append(f"  Fan    [{'cyan' if st['fan']=='ON' else 'dim'}]{'■' if st['fan']=='ON' else '□'} {st['fan']}[/]")
     lines.append(f"  Mode   [blue]{st['mode']}[/]")
@@ -350,7 +483,7 @@ def render(s, connected, broker):
     conn_str = f"[green]● {broker}[/]" if connected else "[red]● offline[/]"
     t_str    = datetime.now().strftime("%H:%M:%S")
     layout["header"].update(Panel(
-        f"  [bold]HydroOne[/] [dim]ESP32 Simulator[/]   {conn_str}   [dim]{t_str}[/]   "
+        f"  [bold]HydroponicOne[/] [dim]ESP32 Simulator[/]   {conn_str}   [dim]{t_str}[/]   "
         f"[dim]t+{int(s.elapsed())}s[/]",
         style="on default", box=box.HORIZONTALS
     ))
@@ -398,7 +531,7 @@ def publish_loop(state, client, no_mqtt, broker):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="HydroOne ESP32 node simulator")
+    parser = argparse.ArgumentParser(description="HydroponicOne ESP32 node simulator")
     parser.add_argument("--broker",   default="localhost:1883", help="MQTT broker host[:port]")
     parser.add_argument("--no-mqtt",  action="store_true",      help="run without MQTT (offline demo)")
     parser.add_argument("--speed",    type=float, default=1.0,  help="sim speed multiplier")
@@ -411,23 +544,28 @@ def main():
     console = Console()
     next_publish = time.time()
 
-    # Key input thread (non-blocking)
-    import termios, tty, select
-
+    # Key input handling
     def getch_noblock():
         """Return pressed key or None without blocking."""
-        fd = sys.stdin.fileno()
-        old = termios.tcgetattr(fd)
-        try:
-            tty.setcbreak(fd)
-            r, _, _ = select.select([sys.stdin], [], [], 0)
-            if r:
-                return sys.stdin.read(1)
-        except Exception:
-            pass
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old)
-        return None
+        if sys.platform == "win32":
+            import msvcrt
+            if msvcrt.kbhit():
+                return msvcrt.getch().decode('utf-8').lower()
+            return None
+        else:
+            import termios, tty, select
+            fd = sys.stdin.fileno()
+            old = termios.tcgetattr(fd)
+            try:
+                tty.setcbreak(fd)
+                r, _, _ = select.select([sys.stdin], [], [], 0)
+                if r:
+                    return sys.stdin.read(1)
+            except Exception:
+                pass
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old)
+            return None
 
     FAULT_MAP = {
         "1": ("ph",      -1.0,  "pH crash injected"),
@@ -444,8 +582,9 @@ def main():
             now = time.time()
 
             # Advance sim time
-            state.t += args.speed * (now - (now - 0.01))  # tiny increment each frame
-            state.t += args.speed * 0.25   # ~1 sim-second per 0.25 real-sec at 4fps
+            dt = 1.0 / 4.0   # roughly 0.25s per frame at 4fps
+            state.t += args.speed * dt
+            state.step_physics(dt)
 
             # Publish every INTERVAL seconds
             if now >= next_publish:
@@ -454,6 +593,7 @@ def main():
                 ts_iso  = datetime.utcnow().isoformat() + "Z"
 
                 publishes = [
+                    ("sensors",                   json.dumps(state.aggregated_sensors_payload())),
                     ("sensors/water/temperature", sensors["water_temp"]),
                     ("sensors/air/temperature",   sensors["air_temp"]),
                     ("sensors/air/humidity",      sensors["humidity"]),
@@ -461,10 +601,16 @@ def main():
                     ("sensors/water/ph",          sensors["ph"]),
                     ("sensors/water/ec",          sensors["ec"]),
                     ("sensors/reservoir/distance",sensors["distance"]),
+                    ("sensors/water/level",       sensors["level_pct"]),
                     ("sensors/water/level_percent",sensors["level_pct"]),
                     ("sensors/water/level_litres", sensors["level_litres"]),
+                    ("power/battery",             12.01), # matches SensorData default
                     ("status",                    json.dumps(state.status_payload())),
-                    ("heartbeat",                 ts_iso),
+                    ("heartbeat",                 json.dumps({
+                        "timestamp": int(state.elapsed() * 1000),
+                        "uptime": int(state.elapsed()),
+                        "heap": random.randint(120000, 180000)
+                    })),
                 ]
 
                 for suffix, payload in publishes:
@@ -487,14 +633,19 @@ def main():
                     state.reset()
                     state.log.append(("[dim]faults cleared[/dim]", datetime.now()))
                 elif key == "4":
-                    state.pump_on = True
-                    state.log.append(("[green]pump ON (manual)[/green]", datetime.now()))
-                    if client and connected:
-                        client.publish(full_topic("status"),
-                                       json.dumps({"pump": "ON"}), qos=1)
+                    if state.pump_state != "COOLDOWN":
+                        state.pump_state = "ON"
+                        state.pump_start_time = int(state.elapsed() * 1000)
+                        state.pump_duration = PUMP_MAX_ON_TIME
+                        state.log.append(("[green]Manual Pump START[/green]", datetime.now()))
+                        if client and connected:
+                            client.publish(full_topic("status"), json.dumps({"pump": "ON"}), qos=1)
                 elif key == "5":
-                    state.pump_on = False
-                    state.log.append(("[dim]pump OFF (manual)[/dim]", datetime.now()))
+                    state.pump_state = "OFF"
+                    state.pump_start_time = 0
+                    state.log.append(("[red]Manual Pump STOP[/red]", datetime.now()))
+                    if client and connected:
+                        client.publish(full_topic("status"), json.dumps({"pump": "OFF"}), qos=1)
                 elif key in FAULT_MAP and FAULT_MAP[key]:
                     fkey, mag, label = FAULT_MAP[key]
                     state.inject(fkey, mag)

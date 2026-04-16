@@ -42,10 +42,10 @@ export function Sidebar() {
           <div className="sidebar-logo">
             <img
               src="/assets/logo-white.png"
-              alt="HydroOne Logo"
+              alt="HydroponicOne Logo"
               style={{ height: '32px', width: 'auto', objectFit: 'contain' }}
             />
-            <span className="sidebar-logo-text">HydroOne</span>
+            <span className="sidebar-logo-text">HydroponicOne</span>
           </div>
           <button
             className="sidebar-close btn-icon"
@@ -75,7 +75,7 @@ export function Sidebar() {
 
         {/* Footer */}
         <div className="sidebar-footer">
-          <span>HydroOne v2.0</span>
+          <span>HydroponicOne v1.0</span>
           <span>Professional Hydroponic Control</span>
         </div>
       </aside>

@@ -54,9 +54,9 @@ def sign_firmware(fw_path=DEFAULT_FW_PATH):
     )
     signature_b64 = base64.b64encode(signature).decode('utf-8')
 
-    # 4. Output — paste these into the HydroOne Dashboard OTA page
+    # 4. Output — paste these into the HydroponicOne Dashboard OTA page
     print("\n" + "="*60)
-    print(" SIGNED OTA CREDENTIALS — Paste into HydroOne Dashboard")
+    print(" SIGNED OTA CREDENTIALS — Paste into HydroponicOne Dashboard")
     print("="*60)
     print(f"\n  SHA256:    {sha256_hex}")
     print(f"\n  Signature: {signature_b64}")
