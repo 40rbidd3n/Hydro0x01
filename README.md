@@ -37,7 +37,7 @@
 | **DevOps** | Docker support, GitHub Actions, Secure OTA deployment |
 
 <p align="center">
-  <img src="assets/diagrams/HydroponicOne-network-topology.png" alt="HydroponicOne System Architecture" width="100%">
+  <img src="assets/diagrams/HydroponicOne-architecture-master.png" alt="HydroponicOne System Architecture" width="100%">
 </p>
 
 ---
