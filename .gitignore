@@ -57,10 +57,6 @@ temp/
 *.tmp
 *.orig
 
-# --- Security (CRITICAL: Never commit these) ---
-firmware/data/*
-!firmware/data/.gitkeep
-
 # --- JavaScript / Backend / Frontend ---
 node_modules/
 
@@ -75,3 +71,8 @@ brain/
 tools/.venv
 .venv
 **/.venv
+
+# Firmware secrets
+firmware/include/config.h
+firmware/data/*
+!firmware/data/.gitkeep

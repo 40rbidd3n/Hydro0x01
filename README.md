@@ -37,7 +37,7 @@
 | **DevOps** | Docker support, GitHub Actions, Secure OTA deployment |
 
 <p align="center">
-  <img src="assets/diagrams/HydroponicOne-network-topology.png" alt="HydroponicOne System Architecture" width="100%">
+  <img src="assets/diagrams/HydroponicOne-architecture-master.png" alt="HydroponicOne System Architecture" width="100%">
 </p>
 
 ---
@@ -82,9 +82,14 @@ npm run dev
 ```
 
 **4. Build & Flash Firmware**
-Review the [Hardware Setup](docs/02_HARDWARE_SETUP.md) and connect your sensors to the ESP32. Then configure `firmware/include/config.h` and upload the firmware.
+Review the [Hardware Setup](docs/02_HARDWARE_SETUP.md) and connect your sensors to the ESP32.
 ```bash
 cd ../firmware
+
+# IMPORTANT: Clone the configuration template before compiling
+cp include/config.example.h include/config.h
+# Edit include/config.h with your network and MQTT details
+
 # Edit platformio.ini to choose your hardware environment (e.g., env:esp32_dht_bmp)
 pio run -t upload
 ```
@@ -117,9 +122,22 @@ Explore our comprehensive guides located in the `docs/` folder:
 
 ---
 
-## 🤝 Contributing
+## 🚀 Releases & Changelog
+
+All code modifications and versioning are strictly documented. Check the [CHANGELOG.md](CHANGELOG.md) for version histories or the [GitHub Releases](https://github.com/40rbidd3n/Hydro0x01/releases) page to download pre-compiled bins and read full production release notes.
+
+---
+
+## 🤝 Contributing & Community
 
 We actively welcome community contributions to improve HydroponicOne! Please see our [**Contributing Guidelines**](CONTRIBUTING.md) and our [**Code of Conduct**](CODE_OF_CONDUCT.md) before submitting pull requests.
+
+### 🗺️ Future Roadmap
+We have an extensive development plan ranging from LoRa Master/Slave setups to AI diagnostics. View the complete [Development Roadmap](docs/ROADMAP.md) to see where we are heading.
+
+<a href="https://github.com/40rbidd3n/Hydro0x01/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=40rbidd3n/Hydro0x01" alt="Contributors" />
+</a>
 
 ## 📄 License
 

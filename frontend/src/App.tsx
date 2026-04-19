@@ -31,7 +31,6 @@ export default function App() {
             <Route path="/controls" element={<ControlsPage />} />
             <Route path="/environment" element={<EnvironmentPage />} />
             <Route path="/configuration" element={<ConfigurationPage />} />
-            {/* Sensor / tank calibration wizard — also linked from Configuration page and sidebar */}
             <Route path="/calibration" element={<CalibrationPage />} />
             <Route path="/ota" element={<OtaPage />} />
             <Route path="/history" element={<HistoryPage />} />
