@@ -68,10 +68,22 @@ Configure the environment and seed the database.
 cd backend
 npm install
 cp .env.example .env
-# Edit .env with your DB credentials and a secure JWT Secret
+# Edit .env with your DB credentials and set JWT_SECRET using: openssl rand -base64 32
 npx prisma db push
 npm run dev
 ```
+
+`JWT_SECRET` is required and must contain at least 32 characters. The backend
+rejects missing, blank, short, or previously published example secrets.
+Generate a secret once per installation and keep the same value across restarts;
+changing it invalidates existing tokens.
+
+For Docker deployments, save the generated secret as `JWT_SECRET=<your secret>`
+in `docker/.env` (ignored by Git), then run from the repository root:
+```bash
+docker compose -f docker/docker-compose.yml up -d --build
+```
+Compose requires a non-empty `JWT_SECRET` from `docker/.env` or your shell.
 
 **3. Setup Frontend**
 ```bash

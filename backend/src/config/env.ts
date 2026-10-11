@@ -19,7 +19,14 @@ const envSchema = z.object({
   PORT: z.string().default('3000'),
   FRONTEND_ORIGIN: z.string().default('http://localhost:5173'),
 
-  JWT_SECRET: z.string().default('openhydro_super_secret_jwt_key_develop_only'),
+  JWT_SECRET: z.string().refine(
+    (secret) => secret.trim().length >= 32 && ![
+      'openhydro_super_secret_jwt_key_develop_only',
+      'HydroponicOne_super_secret_jwt_key_development_only',
+      'change_me_in_production_run_openssl_rand_base64_32',
+    ].includes(secret.trim()),
+    { message: 'JWT_SECRET must be a unique random secret of at least 32 characters; generate one with openssl rand -base64 32' },
+  ),
 })
 
 export type Env = ReturnType<typeof validateEnv>;
