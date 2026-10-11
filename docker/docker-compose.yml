@@ -67,7 +67,7 @@ services:
       - MQTT_BASE_TOPIC=HydroponicOne
       - PORT=3000
       - FRONTEND_ORIGIN=http://localhost:80
-      - JWT_SECRET=change_me_in_production_run_openssl_rand_base64_32
+      - JWT_SECRET=${JWT_SECRET:?Set JWT_SECRET to a unique random secret (openssl rand -base64 32)}
 
   frontend:
     build:
