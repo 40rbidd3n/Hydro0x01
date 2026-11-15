@@ -14,7 +14,7 @@
     "clsx": "^2.1.0",
     "date-fns": "^4.1.0",
     "lucide-react": "latest",
-    "node-forge": "^1.4.0",
+    "node-forge": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.18.4",
